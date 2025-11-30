@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Trucks</h3>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Truck Number (numbers only)</label>
+        <input type="text" name="number" class="form-control" pattern="\d+" required>
+      </div>
+      <div class="col-md-6 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Add Truck</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Truck Number</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in trucks %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ t.number }}</td>
+        <td>
+          {% if t.active %}
+          <span class="badge bg-success">Active</span>
+          {% else %}
+          <span class="badge bg-secondary">Inactive</span>
+          {% endif %}
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-warning me-1" onclick="askPasswordAndGo('{{ url_for('toggle_truck', truck_id=t.id) }}')">Toggle Active</button>
+          <button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="askPasswordAndGo('{{ url_for('edit_truck', truck_id=t.id) }}')">Edit</button>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="askPasswordAndGo('{{ url_for('delete_truck', truck_id=t.id) }}')">Delete</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted">No trucks yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

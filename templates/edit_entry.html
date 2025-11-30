@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Edit Entry</h3>
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Category</label>
+        <select name="category" id="category" class="form-select" required>
+          <option value="Income" {% if entry.main_category=='Income' %}selected{% endif %}>Income</option>
+          <option value="Expense" {% if entry.main_category=='Expense' %}selected{% endif %}>Expense</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Type</label>
+        <select name="type" id="type" class="form-select" required></select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Truck</label>
+        <select name="truck_id" class="form-select" required>
+          {% for t in trucks %}
+          <option value="{{ t.id }}" {% if t.id == entry.truck_id %}selected{% endif %}>{{ t.number }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Driver</label>
+        <select name="driver_id" class="form-select" required>
+          {% for d in drivers %}
+          <option value="{{ d.id }}" {% if d.id == entry.driver_id %}selected{% endif %}>{{ d.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Amount ($)</label>
+        <input type="number" step="0.01" min="0" name="amount" class="form-control" value="{{ entry.amount }}" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Date</label>
+        <input type="date" name="date" class="form-control" value="{{ entry.date }}" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Amount includes HST?</label>
+        <select name="includes_hst" class="form-select" required>
+          <option value="">Select...</option>
+          <option value="yes" {% if entry.includes_hst %}selected{% endif %}>Yes</option>
+          <option value="no" {% if not entry.includes_hst %}selected{% endif %}>No</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Description</label>
+        <input type="text" name="description" class="form-control" value="{{ entry.description }}" required>
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Update Entry</button>
+        <a href="{{ url_for('expense_income') }}" class="btn btn-secondary ms-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const typeOptions = {
+    "Income": ["Lor-Cor", "HST Return", "Other"],
+    "Expense": ["Fuel", "Truck Repair", "Trailer Repair", "Insurance", "Parking", "Tires", "Driver Pay", "Other"]
+  };
+  const categorySelect = document.getElementById("category");
+  const typeSelect = document.getElementById("type");
+
+  function refreshTypeOptions(selected) {
+    const cat = categorySelect.value;
+    typeSelect.innerHTML = '';
+    const opts = typeOptions[cat] || [];
+    opts.forEach(o => {
+      const opt = document.createElement("option");
+      opt.value = o;
+      opt.textContent = o;
+      if (o === selected) opt.selected = true;
+      typeSelect.appendChild(opt);
+    });
+  }
+  categorySelect.addEventListener("change", () => refreshTypeOptions("{{ entry.sub_category }}"));
+  refreshTypeOptions("{{ entry.sub_category }}");
+</script>
+{% endblock %}

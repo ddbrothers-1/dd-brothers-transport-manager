@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Edit Truck</h3>
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Truck Number (numbers only)</label>
+        <input type="text" name="number" class="form-control" pattern="\d+" value="{{ truck.number }}" required>
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-primary">Update Truck</button>
+        <a href="{{ url_for('trucks') }}" class="btn btn-secondary ms-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

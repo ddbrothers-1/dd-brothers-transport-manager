@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-3">Drivers</h3>
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Driver Name</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="col-md-6 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Add Driver</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in drivers %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.name }}</td>
+        <td>
+          {% if d.active %}
+          <span class="badge bg-success">Active</span>
+          {% else %}
+          <span class="badge bg-secondary">Inactive</span>
+          {% endif %}
+        </td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-warning me-1" onclick="askPasswordAndGo('{{ url_for('toggle_driver', driver_id=d.id) }}')">Toggle Active</button>
+          <button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="askPasswordAndGo('{{ url_for('edit_driver', driver_id=d.id) }}')">Edit</button>
+          <button type="button" class="btn btn-sm btn-outline-danger" onclick="askPasswordAndGo('{{ url_for('delete_driver', driver_id=d.id) }}')">Delete</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted">No drivers yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
