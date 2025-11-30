@@ -55,11 +55,3 @@ body {
   background: radial-gradient(circle at top left, #001f3f 0, #001f3f 35%, #ffffff 36%, #ffffff 100%);
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-  .main-content {
-    width: 100%;
-  }
-}
